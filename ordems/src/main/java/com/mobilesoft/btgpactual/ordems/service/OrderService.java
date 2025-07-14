@@ -65,7 +65,10 @@ public class OrderService {
         );
 
         var response = mongoTemplate.aggregate(aggregation, "tb_orders", Document.class);
+        var result = response.getUniqueMappedResult();
 
-        return new BigDecimal(response.getUniqueMappedResult().get("total").toString());
+        return result != null ?
+                new BigDecimal(result.get("total").toString()) :
+                BigDecimal.ZERO;
     }
 }
